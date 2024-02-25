@@ -39,7 +39,7 @@ namespace Application.Services
                     Sex = u.Sex,
                     BirthDate = u.BirthDate.ToString("MM/dd/yyyy"),
                     Active = u.IsActive ? "Yes" : "No",
-                    RoleName = u.Role.Name,
+                    Role = u.Role.Name,
                 }
 			});
 		}

@@ -16,7 +16,6 @@ namespace Application.Models
 
         public Sex Sex { get; set; }
 
-        [DisplayName("Role")]
-        public string? RoleName { get; set; }
+        public string? Role { get; set; }
     }
 }

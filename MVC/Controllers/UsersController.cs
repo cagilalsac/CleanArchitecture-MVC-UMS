@@ -27,7 +27,6 @@ namespace MVC.Controllers
             return View(userList);
         }
 
-        
         // GET: Users/Details/5
         public IActionResult Details(int id)
         {
@@ -39,12 +38,15 @@ namespace MVC.Controllers
             return View(user);
         }
 
-        
         // GET: Users/Create
         public IActionResult Create()
         {
             ViewData["RoleId"] = new SelectList(_roleService.GetQueryList(), "Id", "Name");
-            return View(new UserCommandModel() { IsActive = true });
+            UserCommandModel user = new UserCommandModel()
+            {
+                IsActive = true
+            };
+            return View(user);
         }
 
         // POST: Users/Create
@@ -60,26 +62,25 @@ namespace MVC.Controllers
                 if (result.IsSuccessful)
                 {
                     TempData["Message"] = result.Message;
-					return RedirectToAction(nameof(Details), new { id = userCommand.Id });
-				}
+                    return RedirectToAction(nameof(Details), new { id = userCommand.Id });
+                }
                 ModelState.AddModelError("", result.Message);
             }
 			ViewData["RoleId"] = new SelectList(_roleService.GetQueryList(), "Id", "Name");
 			return View(userCommand);
         }
 
-        
         // GET: Users/Edit/5
         public IActionResult Edit(int id)
         {
-            UserCommandModel user = _userService.GetCommand().SingleOrDefault(u => u.Id == id);
+			UserCommandModel user = _userService.GetCommand().SingleOrDefault(u => u.Id == id);
 			if (user == null)
 			{
 				return View("Error", "User not found!");
 			}
 			ViewData["RoleId"] = new SelectList(_roleService.GetQueryList(), "Id", "Name");
 			return View(user);
-        }
+		}
 
         // POST: Users/Edit
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -88,20 +89,19 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(UserCommandModel userCommand)
         {
-			if (ModelState.IsValid)
-			{
-				Result result = _userService.Update(userCommand);
-				if (result.IsSuccessful)
-				{
-					TempData["Message"] = result.Message;
-					return RedirectToAction(nameof(Details), new { id = userCommand.Id });
-				}
-				ModelState.AddModelError("", result.Message);
-			}
-			ViewData["RoleId"] = new SelectList(_roleService.GetQueryList(), "Id", "Name");
-			return View(userCommand);
-		}
-
+            if (ModelState.IsValid)
+            {
+                Result result = _userService.Update(userCommand);
+                if (result.IsSuccessful)
+                {
+                    TempData["Message"] = result.Message;
+                    return RedirectToAction(nameof(Details), new { id = userCommand.Id });
+                }
+                ModelState.AddModelError("", result.Message);
+            }
+            ViewData["RoleId"] = new SelectList(_roleService.GetQueryList(), "Id", "Name");
+            return View(userCommand);
+        }
 
         // GET: Users/Delete/5
         public IActionResult Delete(int id)
@@ -109,8 +109,8 @@ namespace MVC.Controllers
             UserQueryModel user = _userService.GetQuery().SingleOrDefault(u => u.Id == id);
             if (user == null)
             {
-				return View("Error", "User not found!");
-			}
+                return View("Error", "User not found!");
+            }
             return View(user);
         }
 
@@ -123,5 +123,5 @@ namespace MVC.Controllers
             TempData["Message"] = result.Message;
             return RedirectToAction(nameof(Index));
         }
-    }
+	}
 }
