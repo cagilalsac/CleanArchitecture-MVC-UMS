@@ -43,7 +43,6 @@ namespace Application.Services
                 return new ErrorResult("Role with the same name exists!");
             Role role = new Role()
             {
-                Guid = Guid.NewGuid().ToString(),
                 Name = command.Name.Trim()
             };
             _db.Roles.Add(role);

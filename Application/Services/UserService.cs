@@ -52,7 +52,6 @@ namespace Application.Services
 			{
 				BirthDate = command.BirthDate.Value,
 				RoleId = command.RoleId ?? 0,
-				Guid = Guid.NewGuid().ToString(),
 				IsActive = command.IsActive,
 				Password = command.Password.Trim(),
 				Sex = command.Sex,
@@ -68,16 +67,15 @@ namespace Application.Services
 		{
 			if (_db.Users.Any(u => u.Id != command.Id && u.UserName.ToLower() == command.UserName.ToLower().Trim()))
 				return new ErrorResult("User with the same user name exists!");
-			User user = new User()
-			{
-				Id = command.Id,
-				BirthDate = command.BirthDate.Value,
-				RoleId = command.RoleId ?? 0,
-				IsActive = command.IsActive,
-				Password = command.Password.Trim(),
-				Sex = command.Sex,
-				UserName = command.UserName.Trim()
-			};
+			User user = _db.Users.Find(command.Id);
+			if (user is null)
+				return new ErrorResult("User not found!");
+			user.BirthDate = command.BirthDate.Value;
+			user.RoleId = command.RoleId ?? 0;
+			user.IsActive = command.IsActive;
+			user.Password = command.Password.Trim();
+			user.Sex = command.Sex;
+			user.UserName = command.UserName.Trim();
 			_db.Users.Update(user);
 			_db.SaveChanges();
 			return new SuccessResult("User updated successfully.");

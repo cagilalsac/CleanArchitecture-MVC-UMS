@@ -19,9 +19,9 @@ namespace Persistence.Seeds
             var roles = db.Roles.ToList();
             db.Roles.RemoveRange(roles);
 
-            if (roles.Count > 0) 
+            if (roles.Count > 0)
             {
-                db.Database.ExecuteSqlRaw("dbcc CHECKIDENT ('Roles', RESEED, 0)"); 
+                db.Database.ExecuteSqlRaw("dbcc CHECKIDENT ('Roles', RESEED, 0)");
             }
 
             db.Roles.Add(new Role()
